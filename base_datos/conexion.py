@@ -14,7 +14,7 @@ class Conexion:
     self.conexion.commit()
 
   def agregar_usuario(self, dni, usuario, contrasena):
-    self.cursor.execute("INSERT INTO cliente VALUES(?,?,?)",
+    self.cursor.execute("INSERT INTO usuario VALUES(?,?,?)",
                         (dni, usuario, contrasena))
     self.conexion.commit()
 
