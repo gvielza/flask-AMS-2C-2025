@@ -1,8 +1,11 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from base_datos.conexion import Conexion
+
+from flask_cors import CORS
 
 
 app =Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def index():
@@ -27,3 +30,21 @@ def resultado():
         return render_template("resultado.html", dni=dni,usuario=usuario,clientes=clientes)
     else:
         return render_template("resultado.html")
+    
+@app.route("/api/enviar-datos", methods=['POST'])
+def recibir_datos():
+    datos=request.get_json()
+    dni=datos.get('dni')
+    usuario=datos.get('usuario')
+    contrasenna=datos.get('contrasenna')
+    
+    mi_conexion=Conexion("base_datos/mi_app.db")
+    mi_conexion.agregar_usuario(dni, usuario, contrasenna)
+    mi_conexion.cerrar_conexion()
+
+    return jsonify({
+        'status':'ok',
+        'mensaje':f"Recibido  dni={dni}, usuario={usuario}" 
+    }),200
+
+    
